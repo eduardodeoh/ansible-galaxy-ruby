@@ -1,0 +1,26 @@
+---
+# tasks file for ruby
+
+- name: Install packages required for ruby install
+  apt: pkg={{item}} state=latest update_cache=yes install_recommends=yes
+  with_items: pkgs_to_install_ruby
+  sudo: yes
+  tags: install_pkgs_for_ruby
+
+- name: Install Ruby via Rbenv for selected users
+  #shell: bash -lc "rbenv install {{ ruby_version }}"
+  script: ruby.sh "{{ ruby_version }}"
+  sudo: true
+  sudo_user: "{{ item }}"
+  with_items: rbenv_users
+  ignore_errors: true
+  tags: install_ruby
+
+- name: Setting Ruby version for selected users
+  shell: bash -lc "rbenv global {{ ruby_version }}"
+  sudo: true
+  sudo_user: "{{ item }}"
+  with_items: rbenv_users
+  ignore_errors: true
+  tags: setting_ruby_bersion
+
