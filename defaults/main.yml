@@ -24,3 +24,6 @@ pkgs_to_install_ruby:
   - bison
   - libreadline6
   - libreadline6-dev
+
+rbenv_users:
+  - deploy
