@@ -1,7 +1,9 @@
 ---
 # defaults file for ruby
 
-ruby_version: 2.1.1
+ruby_versions:
+  - 2.1.1
+global_ruby_version: 2.1.1
 
 pkgs_to_install_ruby:
   - build-essential

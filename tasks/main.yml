@@ -7,30 +7,31 @@
   sudo: yes
   tags: install_pkgs_for_ruby
 
-- name: Install Ruby via Rbenv for selected users
-  shell: bash -lc "rbenv install --patch {{ ruby_version }}  < <(curl -fsSL https://gist.github.com/mislav/a18b9d7f0dc5b9efc162.txt)"
+- name: Install Ruby via rbenv for selected users
+  shell: bash -lc "rbenv install --patch {{ item[1] }}  < <(curl -fsSL https://gist.github.com/mislav/a18b9d7f0dc5b9efc162.txt)"
   sudo: true
-  sudo_user: "{{ item }}"
-  with_items: rbenv_users
+  sudo_user: "{{ item[0] }}"
   ignore_errors: true
-  when: ruby_version  == "2.1.1"
-  tags: install_ruby
+  when: item[1] == "2.1.1"
+  with_nested:
+    - rbenv_users
+    - ruby_versions
 
-
-- name: Install Ruby via Rbenv for selected users
-  shell: bash -lc "rbenv install {{ ruby_version }}"
+- name: Install Ruby via rbenv for selected users
+  shell: bash -lc "rbenv install {{ item[1] }}"
   sudo: true
-  sudo_user: "{{ item }}"
-  with_items: rbenv_users
+  sudo_user: "{{ item[0] }}"
   ignore_errors: true
-  when: ruby_version != "2.1.1"
+  when: item[1] != "2.1.1"
   tags: install_ruby
+  with_nested:
+    - rbenv_users
+    - ruby_versions
 
-- name: Setting Ruby version for selected users
-  shell: bash -lc "rbenv global {{ ruby_version }}"
+- name: Setting global Ruby version for selected users
+  shell: bash -lc "rbenv global {{ global_ruby_version }}"
   sudo: true
   sudo_user: "{{ item }}"
   with_items: rbenv_users
   ignore_errors: true
   tags: setting_ruby_version
-
