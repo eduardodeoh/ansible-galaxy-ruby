@@ -8,12 +8,22 @@
   tags: install_pkgs_for_ruby
 
 - name: Install Ruby via Rbenv for selected users
-  #shell: bash -lc "rbenv install {{ ruby_version }}"
-  script: ruby.sh "{{ ruby_version }}"
+  shell: bash -lc "rbenv install --patch {{ ruby_version }}  < <(curl -fsSL https://gist.github.com/mislav/a18b9d7f0dc5b9efc162.txt)"
   sudo: true
   sudo_user: "{{ item }}"
   with_items: rbenv_users
   ignore_errors: true
+  when: ruby_version  == "2.1.1"
+  tags: install_ruby
+
+
+- name: Install Ruby via Rbenv for selected users
+  shell: bash -lc "rbenv install {{ ruby_version }}"
+  sudo: true
+  sudo_user: "{{ item }}"
+  with_items: rbenv_users
+  ignore_errors: true
+  when: ruby_version != "2.1.1"
   tags: install_ruby
 
 - name: Setting Ruby version for selected users
@@ -22,5 +32,5 @@
   sudo_user: "{{ item }}"
   with_items: rbenv_users
   ignore_errors: true
-  tags: setting_ruby_bersion
+  tags: setting_ruby_version
 
