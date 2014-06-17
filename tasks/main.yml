@@ -34,3 +34,16 @@
   ignore_errors: true
   tags: setting_ruby_version
 
+- name: Install packages required for jRuby install
+  apt: pkg={{item}} state=latest update_cache=yes install_recommends=yes
+  with_items: pkgs_to_install_jruby
+  sudo: yes
+  tags: install_pkgs_for_jruby
+
+- name: Install jRuby via Rbenv for selected users
+  shell: bash -lc "rbenv install {{ jruby_version }}"
+  sudo: true
+  sudo_user: "{{ item }}"
+  with_items: rbenv_users
+  ignore_errors: true
+  tags: install_jruby

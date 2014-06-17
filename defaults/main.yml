@@ -27,3 +27,9 @@ pkgs_to_install_ruby:
 
 rbenv_users:
   - deploy
+
+pkgs_to_install_jruby:
+  - default-jre
+  - default-jdk
+
+jruby_version: 2.1.1
